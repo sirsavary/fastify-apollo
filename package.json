@@ -1,0 +1,37 @@
+{
+  "name": "fastify-apollo",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "tap test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/coopnd/fastify-apollo.git"
+  },
+  "keywords": [
+    "fastify",
+    "apollo",
+    "graphql"
+  ],
+  "author": "Nickolena Coop",
+  "license": "MIT",
+  "homepage": "https://github.com/coopnd/fastify-apollo#readme",
+  "bugs": {
+    "url": "https://github.com/coopnd/fastify-apollo/issues"
+  },
+  "dependencies": {
+    "apollo-server-core": "^1.0.2",
+    "apollo-server-module-graphiql": "^1.0.2",
+    "fastify-plugin": "^0.1.0"
+  },
+  "devDependencies": {
+    "fastify": "^0.25.1",
+    "graphql": "^0.10.5",
+    "graphql-tools": "^1.1.0",
+    "request": "^2.81.0",
+    "standard": "^10.0.2",
+    "tap": "^10.7.0"
+  }
+}
