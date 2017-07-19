@@ -1,8 +1,8 @@
-"use strict";
+'use strict'
 
-const { runHttpQuery } = require("apollo-server-core");
-const { resolveGraphiQLString } = require("apollo-server-module-graphiql");
-const fp = require("fastify-plugin");
+const { runHttpQuery } = require('apollo-server-core')
+const { resolveGraphiQLString } = require('apollo-server-module-graphiql')
+const fp = require('fastify-plugin')
 
 /**
  * @callback FastifyHandler
@@ -15,38 +15,38 @@ const fp = require("fastify-plugin");
  * @param {object} options
  * @return {FastifyHandler}
  */
-function fastifyGraphqlHandler(options) {
+function fastifyGraphqlHandler (options) {
   if (!options) {
-    throw new Error("Apollo server requires options.");
+    throw new Error('Apollo server requires options.')
   }
 
   return async (request, response) => {
-    const { method } = request.req;
+    const { method } = request.req
 
-    response.type("application/json");
+    response.type('application/json')
 
     const res = await runHttpQuery([request.req, response], {
       method,
       options,
-      query: method === "POST" ? request.body : request.query
-    });
+      query: method === 'POST' ? request.body : request.query
+    })
 
     // Was not rendering correctly
-    return JSON.parse(res);
-  };
+    return JSON.parse(res)
+  }
 }
 
 /**
  * @param {object} options
  * @return {FastifyHandler}
  */
-function graphiqlFastify(options) {
+function graphiqlFastify (options) {
   return ({ query, req }, response) => {
     resolveGraphiQLString(query, options, req).then(
-      graphiqlString => response.type("text/html").code(200).send(graphiqlString),
+      graphiqlString => response.type('text/html').code(200).send(graphiqlString),
       error => response.send(error.message).code(500)
-    );
-  };
+    )
+  }
 }
 
 /**
@@ -54,40 +54,40 @@ function graphiqlFastify(options) {
  * @param {*} opts
  * @param {*} next
  */
-function fastifyGraphql(fastify, opts, next) {
+function fastifyGraphql (fastify, opts, next) {
   if (!opts || !opts.graphql) {
-    throw new Error("Graphql must have options");
+    throw new Error('Graphql must have options')
   }
 
   if (!opts.prefix) {
-    opts.prefix = "/";
+    opts.prefix = '/'
   }
 
   if (opts.graphql.graphiql && !opts.graphiql) {
-    Object.assign({}, opts.graphiql, { endpointURL: opts.prefix });
+    Object.assign({}, opts.graphiql, { endpointURL: opts.prefix })
   }
 
-  fastify.get(opts.prefix, fastifyGraphqlHandler(opts.graphql));
-  fastify.post(opts.prefix, fastifyGraphqlHandler(opts.graphql));
+  fastify.get(opts.prefix, fastifyGraphqlHandler(opts.graphql))
+  fastify.post(opts.prefix, fastifyGraphqlHandler(opts.graphql))
 
   if (opts.graphiql || opts.graphql.graphiql) {
-    fastify.get(opts.prefix + "/graphiql", graphiqlFastify(opts.graphiql));
+    fastify.get(opts.prefix + '/graphiql', graphiqlFastify(opts.graphiql))
   }
 
   if (opts.printSchema) {
     fastify.get(
-      opts.prefix + "/schema",
-      { schema: { response: { 200: { type: "string" } } } },
+      opts.prefix + '/schema',
+      { schema: { response: { 200: { type: 'string' } } } },
       (req, reply) => {
         reply
-          .type("text/plain")
+          .type('text/plain')
           .code(200)
-          .send(require("graphql").printSchema(opts.graphql.schema));
+          .send(require('graphql').printSchema(opts.graphql.schema))
       }
-    );
+    )
   }
 
-  next();
+  next()
 }
 
-module.exports = fp(fastifyGraphql);
+module.exports = fp(fastifyGraphql)
