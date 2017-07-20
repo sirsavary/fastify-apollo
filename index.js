@@ -1,7 +1,8 @@
 'use strict'
 
 const runHttpQuery = require('apollo-server-core').runHttpQuery
-const resolveGraphiQLString = require('apollo-server-module-graphiql').resolveGraphiQLString
+const resolveGraphiQLString = require('apollo-server-module-graphiql')
+  .resolveGraphiQLString
 const fp = require('fastify-plugin')
 
 const printSchemaOpts = {
@@ -30,15 +31,17 @@ function graphqlFastify (options) {
   }
 
   return function (request, reply) {
-    const { method } = request.req
+    const method = request.req.method
 
     runHttpQuery([request.req, reply], {
       method,
       options,
       query: method === 'POST' ? request.body : request.query
     }).then(
-      res => reply.type('application/graphql').send(res),
-      err => {
+      function (res) {
+        reply.type('application/graphql').send(res)
+      },
+      function (err) {
         if (err.name === 'HttpQueryError') {
           if (err.headers) {
             Object.keys(err.headers).forEach(function (header) {
@@ -64,10 +67,14 @@ function graphqlFastify (options) {
  * @return {FastifyHandler}
  */
 function graphiqlFastify (options) {
-  return function ({ query, req }, reply) {
-    resolveGraphiQLString(query, options, req).then(
-      graphiqlString => reply.type('text/html').code(200).send(graphiqlString),
-      error => reply.code(500).send(error.message)
+  return function (request, reply) {
+    resolveGraphiQLString(request.query, options, request.req).then(
+      function (graphiqlString) {
+        reply.type('text/html').code(200).send(graphiqlString)
+      },
+      function (err) {
+        reply.code(500).send(err)
+      }
     )
   }
 }
@@ -76,12 +83,12 @@ function graphiqlFastify (options) {
  * @param {object} options - @see GraphQLServerOptions
  * @return {FastifyHandler}
  */
-function printSchema ({ schema }) {
+function printSchema (options) {
   return function (request, reply) {
     reply
       .type('text/plain')
       .code(200)
-      .send(require('graphql').printSchema(schema))
+      .send(require('graphql').printSchema(options.schema))
   }
 }
 
