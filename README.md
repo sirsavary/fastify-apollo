@@ -1,8 +1,8 @@
-> [Apollo](https://github.com/apollographql/apollo-server) for fastify.
+> [Apollo](https://github.com/apollographql/apollo-server) for Fastify.
 
 ###
 
-fasity-apollo
+fastify-apollo
 ---
 
 <p align="center">
