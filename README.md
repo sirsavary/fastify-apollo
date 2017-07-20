@@ -7,6 +7,9 @@ fasity-apollo
 
 <p align="center">
     <img src="https://travis-ci.org/coopnd/fastify-apollo.svg?branch=master">
+    <a href="https://standardjs.com">
+        <img src="https://img.shields.io/badge/code_style-standard-brightgreen.svg">
+    </a>
 </p>
 
 ## Register plugin
@@ -22,7 +25,7 @@ Path                  | Renders
 ----------------------|--------
 `/{prefix}`           | GraphQL endpoint
 `/{prefix}/graphiql`  | GraphiQL
-`/prefix/schema`      | GraphQL schema
+`/{prefix}/schema`      | GraphQL schema
 
 ## Options
 
