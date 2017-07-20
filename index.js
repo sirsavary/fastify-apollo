@@ -29,7 +29,7 @@ function graphqlFastify (options) {
     throw new Error('Apollo server requires options.')
   }
 
-  return async (request, reply) => {
+  return async function (request, reply) {
     const { method } = request.req
 
     reply.type('application/json')
@@ -50,7 +50,7 @@ function graphqlFastify (options) {
  * @return {FastifyHandler}
  */
 function graphiqlFastify (options) {
-  return ({ query, req }, reply) => {
+  return function ({ query, req }, reply) {
     resolveGraphiQLString(query, options, req).then(
       graphiqlString => reply.type('text/html').code(200).send(graphiqlString),
       error => reply.send(error.message).code(500)
@@ -63,7 +63,7 @@ function graphiqlFastify (options) {
  * @return {FastifyHandler}
  */
 function printSchema ({ schema }) {
-  return (request, reply) => {
+  return function (request, reply) {
     reply
       .type('text/plain')
       .code(200)
