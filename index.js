@@ -29,19 +29,33 @@ function graphqlFastify (options) {
     throw new Error('Apollo server requires options.')
   }
 
-  return async function (request, reply) {
+  return function (request, reply) {
     const { method } = request.req
 
-    reply.type('application/json')
-
-    const res = await runHttpQuery([request.req, reply], {
+    runHttpQuery([request.req, reply], {
       method,
       options,
       query: method === 'POST' ? request.body : request.query
-    })
+    }).then(
+      res => reply.type('application/graphql').send(res),
+      err => {
+        if (err.name === 'HttpQueryError') {
+          if (err.headers) {
+            Object.keys(err.headers).forEach(function (header) {
+              reply.header(header, err.headers[header])
+            })
+          }
+        }
 
-    // Was not rendering correctly
-    return JSON.parse(res)
+        if (!err.statusCode) {
+          reply.code(500)
+        } else {
+          reply.code(err.statusCode)
+        }
+
+        reply.type('application/graphql').send(err.message)
+      }
+    )
   }
 }
 
@@ -53,7 +67,7 @@ function graphiqlFastify (options) {
   return function ({ query, req }, reply) {
     resolveGraphiQLString(query, options, req).then(
       graphiqlString => reply.type('text/html').code(200).send(graphiqlString),
-      error => reply.send(error.message).code(500)
+      error => reply.code(500).send(error.message)
     )
   }
 }

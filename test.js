@@ -35,7 +35,7 @@ test('GET /graphql', t => {
       'http://localhost:' + server.server.address().port,
       function (err, response, body) {
         t.error(err)
-        t.strictEqual(response.statusCode, 500)
+        t.strictEqual(response.statusCode, 400)
         server.close()
       }
     )
@@ -69,6 +69,39 @@ test('POST /graphql', t => {
         t.error(err)
         t.strictEqual(response.statusCode, 200)
         t.deepEqual(body.data, { hello: 'world' })
+        server.close()
+      }
+    )
+  })
+})
+
+test('POST /graphql (error)', t => {
+  t.plan(4)
+
+  const server = fastify()
+
+  server.register(require('./index'), {
+    graphql: { schema }
+  })
+
+  server.listen(0, err => {
+    t.error(err)
+
+    request.post(
+      'http://localhost:' + server.server.address().port,
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: {
+          query: '{goodbye}'
+        },
+        json: true
+      },
+      function (err, response, body) {
+        t.error(err)
+        t.strictEqual(response.statusCode, 400)
+        t.deepEqual(body.errors[0].message, 'Cannot query field "goodbye" on type "Query".')
         server.close()
       }
     )
