@@ -1,8 +1,7 @@
 'use strict'
 
 const runHttpQuery = require('apollo-server-core').runHttpQuery
-const resolveGraphiQLString = require('apollo-server-module-graphiql')
-  .resolveGraphiQLString
+const resolveGraphiQLString = require('apollo-server-module-graphiql').resolveGraphiQLString
 const fp = require('fastify-plugin')
 
 const printSchemaOpts = {
@@ -16,13 +15,14 @@ const printSchemaOpts = {
 }
 
 /**
- * @callback FastifyHandler
+ * @callback
+ * @name FastifyHandler
  * @param {fastify.Request} request
  * @param {fastify.Reply} reply
  */
 
 /**
- * @param {object} options - @see GraphQLServerOptions
+ * @param {Object} options - @see GraphQLServerOptions
  * @return {FastifyHandler}
  */
 function graphqlFastify (options) {
@@ -63,7 +63,7 @@ function graphqlFastify (options) {
 }
 
 /**
- * @param {object} options - @see GraphiQLData
+ * @param {Object} options - @see GraphiQLData
  * @return {FastifyHandler}
  */
 function graphiqlFastify (options) {
@@ -97,7 +97,7 @@ function printSchema (options) {
  * @type {object}
  * @prop {string} [prefix]
  * @prop {boolean} [printSchema]
- * @prop {object} graphql - @see GraphQLServerOptions
+ * @prop {Object} graphql - @see GraphQLServerOptions
  * @prop {boolean | object} [graphiql] - @see GraphiQLData
  */
 
