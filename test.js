@@ -2,7 +2,7 @@
 
 const test = require('tap').test
 const fastify = require('fastify')
-const { makeExecutableSchema } = require('graphql-tools')
+const makeExecutableSchema = require('graphql-tools').makeExecutableSchema
 const request = require('request')
 
 const typeDefs = `

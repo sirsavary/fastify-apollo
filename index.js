@@ -1,7 +1,7 @@
 'use strict'
 
-const { runHttpQuery } = require('apollo-server-core')
-const { resolveGraphiQLString } = require('apollo-server-module-graphiql')
+const runHttpQuery = require('apollo-server-core').runHttpQuery
+const resolveGraphiQLString = require('apollo-server-module-graphiql').resolveGraphiQLString
 const fp = require('fastify-plugin')
 
 const printSchemaOpts = {
