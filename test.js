@@ -1,7 +1,6 @@
 'use strict'
 
-const t = require('tap')
-const test = t.test
+const test = require('tap').test
 const fastify = require('fastify')
 const { makeExecutableSchema } = require('graphql-tools')
 const request = require('request')
@@ -26,19 +25,15 @@ test('GET /graphql', t => {
   const server = fastify()
 
   server.register(require('./index'), {
-    prefix: '/',
     graphql: { schema }
   })
 
   server.listen(0, err => {
     t.error(err)
 
-    request(
-      {
-        method: 'GET',
-        uri: 'http://localhost:' + server.server.address().port
-      },
-      (err, response, body) => {
+    request.get(
+      'http://localhost:' + server.server.address().port,
+      function (err, response, body) {
         t.error(err)
         t.strictEqual(response.statusCode, 500)
         server.close()
@@ -53,7 +48,6 @@ test('POST /graphql', t => {
   const server = fastify()
 
   server.register(require('./index'), {
-    prefix: '/',
     graphql: { schema }
   })
 
@@ -71,40 +65,113 @@ test('POST /graphql', t => {
         },
         json: true
       },
-      (err, response, body) => {
+      function (err, response, body) {
         t.error(err)
         t.strictEqual(response.statusCode, 200)
-        t.deepEqual(body.data, {hello: 'world'})
+        t.deepEqual(body.data, { hello: 'world' })
         server.close()
       }
     )
   })
 })
 
-test('GET /graphiql', t => {
-  t.plan(2)
+test('GET /graphiql (options as boolean)', t => {
+  t.plan(4)
 
   const server = fastify()
 
   server.register(require('./index'), {
-    prefix: '/',
-    graphql: { schema, graphiql: true }
+    graphql: { schema },
+    graphiql: true
   })
 
   server.listen(0, err => {
     t.error(err)
 
-    request(
-      {
-        method: 'GET',
-        uri: 'http://localhost:' + server.server.address().port + '/graphiql'
-      },
-      (err, response, body) => {
+    request.get(
+      'http://localhost:' + server.server.address().port + '/graphiql',
+      function (err, response, body) {
         t.error(err)
-        // t.strictEqual(response.statusCode, 200);
-        // t.strictEqual(response.headers["content-type"], "text/html");
+        t.strictEqual(response.statusCode, 200)
+        t.strictEqual(response.headers['content-type'], 'text/html')
         server.close()
       }
     )
+  })
+})
+
+test('GET /graphiql (options as object)', t => {
+  t.plan(4)
+
+  const server = fastify()
+
+  server.register(require('./index'), {
+    graphql: { schema },
+    graphiql: {
+      endpointURL: '/'
+    }
+  })
+
+  server.listen(0, err => {
+    t.error(err)
+
+    request.get(
+      'http://localhost:' + server.server.address().port + '/graphiql',
+      function (err, response, body) {
+        t.error(err)
+        t.strictEqual(response.statusCode, 200)
+        t.strictEqual(response.headers['content-type'], 'text/html')
+        server.close()
+      }
+    )
+  })
+})
+
+test('GET /scheam', t => {
+  t.plan(4)
+
+  const server = fastify()
+
+  server.register(require('./index'), {
+    graphql: { schema },
+    printSchema: true
+  })
+
+  server.listen(0, err => {
+    t.error(err)
+
+    request.get(
+      'http://localhost:' + server.server.address().port + '/schema',
+      function (err, response, body) {
+        t.error(err)
+        t.strictEqual(response.statusCode, 200)
+        t.strictEqual(response.headers['content-type'], 'text/plain')
+        server.close()
+      }
+    )
+  })
+})
+
+test('prefix', t => {
+  t.plan(4)
+
+  const server = fastify()
+
+  server.register(require('./index'), {
+    prefix: '/api',
+    graphql: { schema },
+    graphiql: true,
+    printSchema: true
+  })
+
+  server.ready(function (err) {
+    t.error(err)
+
+    for (let route of server) {
+      const path = Object.keys(route)[0]
+      t.match(path, /^\/api/)
+    }
+
+    server.close()
   })
 })

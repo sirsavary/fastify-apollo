@@ -4,28 +4,37 @@ const { runHttpQuery } = require('apollo-server-core')
 const { resolveGraphiQLString } = require('apollo-server-module-graphiql')
 const fp = require('fastify-plugin')
 
+const printSchemaOpts = {
+  schema: {
+    response: {
+      200: {
+        type: 'string'
+      }
+    }
+  }
+}
+
 /**
  * @callback FastifyHandler
- * @param {*} request
- * @param {*} response
- * @return {Promise<*>}
+ * @param {fastify.Request} request
+ * @param {fastify.Reply} reply
  */
 
 /**
- * @param {object} options
+ * @param {object} options - @see GraphQLServerOptions
  * @return {FastifyHandler}
  */
-function fastifyGraphqlHandler (options) {
+function graphqlFastify (options) {
   if (!options) {
     throw new Error('Apollo server requires options.')
   }
 
-  return async (request, response) => {
+  return async (request, reply) => {
     const { method } = request.req
 
-    response.type('application/json')
+    reply.type('application/json')
 
-    const res = await runHttpQuery([request.req, response], {
+    const res = await runHttpQuery([request.req, reply], {
       method,
       options,
       query: method === 'POST' ? request.body : request.query
@@ -37,57 +46,80 @@ function fastifyGraphqlHandler (options) {
 }
 
 /**
- * @param {object} options
+ * @param {object} options - @see GraphiQLData
  * @return {FastifyHandler}
  */
 function graphiqlFastify (options) {
-  return ({ query, req }, response) => {
+  return ({ query, req }, reply) => {
     resolveGraphiQLString(query, options, req).then(
-      graphiqlString => response.type('text/html').code(200).send(graphiqlString),
-      error => response.send(error.message).code(500)
+      graphiqlString => reply.type('text/html').code(200).send(graphiqlString),
+      error => reply.send(error.message).code(500)
     )
   }
 }
 
 /**
- * @param {*} fastify
- * @param {*} opts
- * @param {*} next
+ * @param {object} options - @see GraphQLServerOptions
+ * @return {FastifyHandler}
  */
-function fastifyGraphql (fastify, opts, next) {
+function printSchema ({ schema }) {
+  return (request, reply) => {
+    reply
+      .type('text/plain')
+      .code(200)
+      .send(require('graphql').printSchema(schema))
+  }
+}
+
+/**
+ * @typedef FastifyApolloOptions
+ * @type {object}
+ * @prop {string} [prefix]
+ * @prop {boolean} [printSchema]
+ * @prop {object} graphql - @see GraphQLServerOptions
+ * @prop {boolean | object} [graphiql] - @see GraphiQLData
+ */
+
+/**
+ * @param {*} fastify
+ * @param {FastifyApolloOptions} opts
+ * @param {Function} next
+ */
+function fastifyApollo (fastify, opts, next) {
   if (!opts || !opts.graphql) {
     throw new Error('Graphql must have options')
   }
 
-  if (!opts.prefix) {
-    opts.prefix = '/'
+  // Do not want double backslashes on path
+  if (opts.prefix === '/') {
+    opts.prefix = undefined
   }
 
-  if (opts.graphql.graphiql && !opts.graphiql) {
-    Object.assign({}, opts.graphiql, { endpointURL: opts.prefix })
+  if (opts.graphiql === true) {
+    opts.graphiql = Object.assign({}, opts.graphiql, {
+      endpointURL: opts.prefix || '/'
+    })
   }
 
-  fastify.get(opts.prefix, fastifyGraphqlHandler(opts.graphql))
-  fastify.post(opts.prefix, fastifyGraphqlHandler(opts.graphql))
+  fastify.register(
+    function (instance, _, done) {
+      instance.get('/', graphqlFastify(opts.graphql))
+      instance.post('/', graphqlFastify(opts.graphql))
 
-  if (opts.graphiql || opts.graphql.graphiql) {
-    fastify.get(opts.prefix + '/graphiql', graphiqlFastify(opts.graphiql))
-  }
-
-  if (opts.printSchema) {
-    fastify.get(
-      opts.prefix + '/schema',
-      { schema: { response: { 200: { type: 'string' } } } },
-      (req, reply) => {
-        reply
-          .type('text/plain')
-          .code(200)
-          .send(require('graphql').printSchema(opts.graphql.schema))
+      if (opts.graphiql) {
+        instance.get('/graphiql', graphiqlFastify(opts.graphiql))
       }
-    )
-  }
+
+      if (opts.printSchema) {
+        instance.get('/schema', printSchemaOpts, printSchema(opts.graphql))
+      }
+
+      done()
+    },
+    { prefix: opts.prefix }
+  )
 
   next()
 }
 
-module.exports = fp(fastifyGraphql)
+module.exports = fp(fastifyApollo)
