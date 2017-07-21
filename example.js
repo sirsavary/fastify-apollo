@@ -5,13 +5,19 @@ const { makeExecutableSchema } = require('graphql-tools')
 
 const typeDefs = `
 type Query {
-    hello: String
+    hello: String,
+    hellos: [String]
 }
 `
 
 const resolvers = {
   Query: {
-    hello: () => 'world'
+    hello: () => 'world',
+    hellos: () => [
+      'hola',
+      'hello',
+      'aloha'
+    ]
   }
 }
 

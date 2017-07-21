@@ -3,16 +3,7 @@
 const runHttpQuery = require('apollo-server-core').runHttpQuery
 const resolveGraphiQLString = require('apollo-server-module-graphiql').resolveGraphiQLString
 const fp = require('fastify-plugin')
-
-const printSchemaOpts = {
-  schema: {
-    response: {
-      200: {
-        type: 'string'
-      }
-    }
-  }
-}
+const schemas = require('./schemas.json')
 
 /**
  * @callback
@@ -80,7 +71,7 @@ function graphiqlFastify (options) {
 }
 
 /**
- * @param {object} options - @see GraphQLServerOptions
+ * @param {Object} options - @see GraphQLServerOptions
  * @return {FastifyHandler}
  */
 function printSchema (options) {
@@ -124,15 +115,15 @@ function fastifyApollo (fastify, opts, next) {
 
   fastify.register(
     function (instance, _, done) {
-      instance.get('/', graphqlFastify(opts.graphql))
-      instance.post('/', graphqlFastify(opts.graphql))
+      instance.get('/', schemas.graphql, graphqlFastify(opts.graphql))
+      instance.post('/', schemas.graphql, graphqlFastify(opts.graphql))
 
       if (opts.graphiql) {
-        instance.get('/graphiql', graphiqlFastify(opts.graphiql))
+        instance.get('/graphiql', schemas.graphiql, graphiqlFastify(opts.graphiql))
       }
 
       if (opts.printSchema) {
-        instance.get('/schema', printSchemaOpts, printSchema(opts.graphql))
+        instance.get('/schema', schemas.printSchema, printSchema(opts.graphql))
       }
 
       done()
