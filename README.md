@@ -1,9 +1,10 @@
-> [Apollo](https://github.com/apollographql/apollo-server) for Fastify.
+> Run an Apollo Server for Fastify.
 
-###
-
-fastify-apollo
 ---
+
+<h1 align="center">
+    <a href="https://github.com/fastity/fastity">fastity</a>-<a href="https://github.com/apollographql/apollo-server">apollo</a>
+</h1>
 
 <p align="center">
     <img src="https://travis-ci.org/coopnd/fastify-apollo.svg?branch=master">
@@ -11,6 +12,13 @@ fastify-apollo
         <img src="https://img.shields.io/badge/code_style-standard-brightgreen.svg">
     </a>
 </p>
+
+---
+
+## Install
+```bash
+npm install --save fastity-apollo graphql
+```
 
 ## Register plugin
 ```js
@@ -25,7 +33,7 @@ Path                  | Renders
 ----------------------|--------
 `/{prefix}`           | GraphQL endpoint
 `/{prefix}/graphiql`  | GraphiQL
-`/{prefix}/schema`      | GraphQL schema
+`/{prefix}/schema`    | GraphQL schema
 
 ## Options
 
