@@ -3,7 +3,7 @@
 ---
 
 <h1 align="center">
-    <a href="https://github.com/fastity/fastity">fastity</a>-<a href="https://github.com/apollographql/apollo-server">apollo</a>
+    <a href="https://github.com/fastity/fastity">fastify</a>-<a href="https://github.com/apollographql/apollo-server">apollo</a>
 </h1>
 
 <p align="center">
@@ -17,7 +17,7 @@
 
 ## Install
 ```bash
-npm install --save fastity-apollo graphql
+npm install --save fastify-apollo graphql
 ```
 
 ## Register plugin
