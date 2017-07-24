@@ -24,7 +24,7 @@ function graphqlFastify (options) {
   return function (request, reply) {
     const method = request.req.method
 
-    runHttpQuery([request.req, reply], {
+    runHttpQuery([request.req], {
       method,
       options,
       query: method === 'POST' ? request.body : request.query

@@ -25,7 +25,7 @@ const schema = makeExecutableSchema({ typeDefs, resolvers })
 
 fastify.register(require('./index'), {
   prefix: '/api',
-  graphql: { schema },
+  graphql: () => ({ schema }),
   graphiql: true,
   printSchema: true
 })
