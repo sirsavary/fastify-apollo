@@ -26,15 +26,18 @@
   },
   "dependencies": {
     "apollo-server-core": "^1.0.2",
-    "apollo-server-module-graphiql": "^1.0.2",
+    "apollo-server-module-graphiql": "^1.0.4",
     "fastify-plugin": "^0.1.0"
   },
   "devDependencies": {
-    "fastify": "^0.25.1",
+    "fastify": "^0.25.2",
     "graphql": "^0.10.5",
     "graphql-tools": "^1.1.0",
     "request": "^2.81.0",
     "standard": "^10.0.2",
     "tap": "^10.7.0"
+  },
+  "peerDependencies": {
+    "graphql": "~0.10.5"
   }
 }
