@@ -25,12 +25,12 @@
     "url": "https://github.com/coopnd/fastify-apollo/issues"
   },
   "dependencies": {
-    "apollo-server-core": "^1.1.0",
-    "apollo-server-module-graphiql": "^1.1.2",
+    "apollo-server-core": "^1.1.7",
+    "apollo-server-module-graphiql": "^1.1.6",
     "fastify-plugin": "^0.1.1"
   },
   "devDependencies": {
-    "fastify": "^0.25.3",
+    "fastify": "^0.30.2",
     "graphql": "^0.10.5",
     "graphql-tools": "^1.2.2",
     "request": "^2.82.0",
