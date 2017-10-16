@@ -1,11 +1,3 @@
-> Run an Apollo Server for Fastify.
-
----
-
-<h1 align="center">
-    <a href="https://github.com/fastity/fastity">fastify</a>-<a href="https://github.com/apollographql/apollo-server">apollo</a>
-</h1>
-
 <p align="center">
     <img src="https://travis-ci.org/coopnd/fastify-apollo.svg?branch=master">
     <a href="https://standardjs.com">
