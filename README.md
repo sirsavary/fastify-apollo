@@ -2,7 +2,7 @@
 
 ## Install
 ```bash
-npm install --save fastify-apollo graphql
+npm install --save fastify fastify-apollo graphql
 ```
 
 ## Register plugin
