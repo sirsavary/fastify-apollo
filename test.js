@@ -18,15 +18,22 @@ const resolvers = {
 }
 
 const schema = makeExecutableSchema({ typeDefs, resolvers })
+const opts = {
+  graphql: {
+    schema
+  },
+  graphiql: {
+    endpointURL: '/',
+    prefix: '/graphiql'
+  }
+}
 
 test('GET /graphql', t => {
   t.plan(3)
 
   const server = fastify()
 
-  server.register(require('./index'), {
-    graphql: { schema }
-  })
+  server.register(require('./index'), opts)
 
   server.listen(0, err => {
     t.error(err)
@@ -47,9 +54,7 @@ test('POST /graphql', t => {
 
   const server = fastify()
 
-  server.register(require('./index'), {
-    graphql: { schema }
-  })
+  server.register(require('./index'), opts)
 
   server.listen(0, err => {
     t.error(err)
@@ -80,9 +85,7 @@ test('POST /graphql (error)', t => {
 
   const server = fastify()
 
-  server.register(require('./index'), {
-    graphql: { schema }
-  })
+  server.register(require('./index'), opts)
 
   server.listen(0, err => {
     t.error(err)
@@ -113,10 +116,7 @@ test('GET /graphiql (options as boolean)', t => {
 
   const server = fastify()
 
-  server.register(require('./index'), {
-    graphql: { schema },
-    graphiql: true
-  })
+  server.register(require('./index'), opts)
 
   server.listen(0, err => {
     t.error(err)
@@ -138,12 +138,7 @@ test('GET /graphiql (options as object)', t => {
 
   const server = fastify()
 
-  server.register(require('./index'), {
-    graphql: { schema },
-    graphiql: {
-      endpointURL: '/'
-    }
-  })
+  server.register(require('./index'), opts)
 
   server.listen(0, err => {
     t.error(err)
@@ -160,15 +155,14 @@ test('GET /graphiql (options as object)', t => {
   })
 })
 
-test('GET /scheam', t => {
+test('GET /schema', t => {
   t.plan(4)
 
   const server = fastify()
 
-  server.register(require('./index'), {
-    graphql: { schema },
+  server.register(require('./index'), Object.assign({}, opts, {
     printSchema: true
-  })
+  }))
 
   server.listen(0, err => {
     t.error(err)
@@ -186,16 +180,14 @@ test('GET /scheam', t => {
 })
 
 test('prefix', t => {
-  t.plan(4)
+  t.plan(3)
 
   const server = fastify()
 
-  server.register(require('./index'), {
+  server.register(require('./index'), Object.assign({}, {
     prefix: '/api',
-    graphql: { schema },
-    graphiql: true,
     printSchema: true
-  })
+  }))
 
   server.ready(function (err) {
     t.error(err)

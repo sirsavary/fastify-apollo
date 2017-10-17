@@ -2,6 +2,7 @@
 
 const fastify = require('fastify')()
 const { makeExecutableSchema } = require('graphql-tools')
+const { graphqlFastify, graphiqlFastify } = require('./')
 
 const typeDefs = `
 type Query {
@@ -13,21 +14,35 @@ type Query {
 const resolvers = {
   Query: {
     hello: () => 'world',
-    hellos: () => [
-      'hola',
-      'hello',
-      'aloha'
-    ]
+    hellos: () => ['hola', 'hello', 'aloha']
   }
 }
 
 const schema = makeExecutableSchema({ typeDefs, resolvers })
 
-fastify.register(require('./index'), {
-  prefix: '/api',
-  graphql: () => ({ schema }),
-  graphiql: true,
-  printSchema: true
+fastify
+  .register(graphqlFastify, {
+    schema,
+    printSchema: true
+  })
+  .register(graphiqlFastify, {
+    endpointURL: '/',
+    prefix: '/graphiql'
+  })
+
+fastify.register(require('./'), {
+  graphql: {
+    schema
+  },
+  graphiql: {
+    endpointURL: '/',
+    prefix: '/graphiql'
+  },
+  prefix: '/v2'
+}, err => {
+  if (err) {
+    throw err
+  }
 })
 
 fastify.listen(8000, function (err) {
@@ -35,7 +50,7 @@ fastify.listen(8000, function (err) {
     throw err
   }
 
-  for (let route of fastify) {
+  for (const route of fastify) {
     console.log(route)
   }
 
