@@ -1,10 +1,12 @@
-<img src="https://travis-ci.org/coopnd/fastify-apollo.svg?branch=master">
+# [fastify](https://github.com/fastify/fastify)-[apollo](https://github.com/apollographql/apollo-server)
 
-<a href="https://standardjs.com">
-  <img src="https://img.shields.io/badge/code_style-standard-brightgreen.svg">
-</a>
+<div>
+  <img src="https://travis-ci.org/coopnd/fastify-apollo.svg?branch=master">
 
----
+  <a href="https://standardjs.com">
+    <img src="https://img.shields.io/badge/code_style-standard-brightgreen.svg">
+  </a>
+</div>
 
 ## Install
 ```bash
@@ -15,41 +17,33 @@ npm install --save fastify-apollo graphql
 ```js
 fastify.register(require("fastify-apollo"), {
     graphql: { schema, rootValue },
-    graphiql: true
+    graphiql: {
+      endpointURL: "/"
+    },
+    prefix: "/api",
+    printSchema: true // `/api/schema`
 });
 ```
 
-## Endpoints
-Path                  | Renders
-----------------------|--------
-`/{prefix}`           | GraphQL endpoint
-`/{prefix}/graphiql`  | GraphiQL
-`/{prefix}/schema`    | GraphQL schema
-
-## Options
-
-### Prefix
-Defaults to "/".
-```js
-options.prefix = "/api"
-```
-
-### GraphQL
+## GraphQL
 Extends [GraphQLServerOptions](https://github.com/apollographql/apollo-server/blob/master/packages/apollo-server-core/src/graphqlOptions.ts#L7-L16) from Apollo.
+
 ```js
-options.graphql = { schema, rootValue }
+const { graphqlFastify } = require("fastify-apollo");
+
+fastify.register(graphqlFastify, {
+  schema
+})
 ```
 
-### GraphiQL
+## GraphiQL
 Uses [`resolveGraphiQLString`](https://github.com/apollographql/apollo-server/blob/master/packages/apollo-server-module-graphiql/src/resolveGraphiQLString.ts#L44-L49) under the hood. Extends [GraphiQLData](https://github.com/apollographql/apollo-server/blob/master/packages/apollo-server-module-graphiql/src/renderGraphiQL.ts#L9-L29).
 
-If no options are supplied for GraphiQL or it is truthy its `endpointURL` will default to the prefix.
 ```js
-options.graphiql = true
-```
+const { graphqlFastify } = require("fastify-apollo");
 
-### PrintSchema
-Prints graphql schema...obviously requires graphql.
-```js
-options.printSchema = true
+fastify.register(graphiqlFastify, {
+  endpointURL: "/",
+  prefix: "/graphiql"
+})
 ```
