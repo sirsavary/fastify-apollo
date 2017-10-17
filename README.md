@@ -1,13 +1,5 @@
 # [fastify](https://github.com/fastify/fastify)-[apollo](https://github.com/apollographql/apollo-server)
 
-<div>
-  <img src="https://travis-ci.org/coopnd/fastify-apollo.svg?branch=master">
-
-  <a href="https://standardjs.com">
-    <img src="https://img.shields.io/badge/code_style-standard-brightgreen.svg">
-  </a>
-</div>
-
 ## Install
 ```bash
 npm install --save fastify-apollo graphql
@@ -47,3 +39,13 @@ fastify.register(graphiqlFastify, {
   prefix: "/graphiql"
 })
 ```
+
+###
+
+<div>
+  <img src="https://travis-ci.org/coopnd/fastify-apollo.svg?branch=master">
+
+  <a href="https://standardjs.com">
+    <img src="https://img.shields.io/badge/code_style-standard-brightgreen.svg">
+  </a>
+</div>
