@@ -1,6 +1,6 @@
 {
   "name": "fastify-apollo",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "description": "Apollo server plugin for Fastify",
   "main": "index.js",
   "engines": {
