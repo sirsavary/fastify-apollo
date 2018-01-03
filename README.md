@@ -32,7 +32,7 @@ fastify.register(graphqlFastify, {
 Uses [`resolveGraphiQLString`](https://github.com/apollographql/apollo-server/blob/master/packages/apollo-server-module-graphiql/src/resolveGraphiQLString.ts#L44-L49) under the hood. Extends [GraphiQLData](https://github.com/apollographql/apollo-server/blob/master/packages/apollo-server-module-graphiql/src/renderGraphiQL.ts#L9-L29).
 
 ```js
-const { graphqlFastify } = require("fastify-apollo");
+const { graphiqlFastify } = require("fastify-apollo");
 
 fastify.register(graphiqlFastify, {
   endpointURL: "/",
