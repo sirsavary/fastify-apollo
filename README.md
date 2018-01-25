@@ -1,51 +1,37 @@
-# [fastify](https://github.com/fastify/fastify)-[apollo](https://github.com/apollographql/apollo-server)
+# fastify-graphql
+<div>
+  <img src="https://travis-ci.org/sirsavary/fastify-graphql.svg?branch=master">
+</div>
 
 ## Install
 ```bash
-npm install --save fastify fastify-apollo graphql
+npm install --save fastify-apollo graphql
 ```
 
-## Register plugin
+## Register Plugins
 ```js
-fastify.register(require("fastify-apollo"), {
-    graphql: { schema, rootValue },
-    graphiql: {
-      endpointURL: "/"
-    },
-    prefix: "/api",
-    printSchema: true // `/api/schema`
+const Fastify = require('fastify');
+const app = Fastify();
+
+const {graphiqlFastify, graphqlFastify} = require('fastify-graphql');
+app.register(graphqlFastify, { 
+  prefix: '/graphql', 
+  graphql: {
+    schema: your_graphql_schema,
+  },
+});
+app.register(graphiqlFastify, {
+  prefix: '/graphiql',
+  graphiql: {
+    endpointURL: '/graphql',
+  }
 });
 ```
 
-## GraphQL
-Extends [GraphQLServerOptions](https://github.com/apollographql/apollo-server/blob/master/packages/apollo-server-core/src/graphqlOptions.ts#L7-L16) from Apollo.
+## Configuration
 
-```js
-const { graphqlFastify } = require("fastify-apollo");
+Both plugins need to be given a prefix, under which they will mount.
 
-fastify.register(graphqlFastify, {
-  schema
-})
-```
+GraphQL settings extends [GraphQLServerOptions](https://github.com/apollographql/apollo-server/blob/master/packages/apollo-server-core/src/graphqlOptions.ts#L7-L16)
 
-## GraphiQL
-Uses [`resolveGraphiQLString`](https://github.com/apollographql/apollo-server/blob/master/packages/apollo-server-module-graphiql/src/resolveGraphiQLString.ts#L44-L49) under the hood. Extends [GraphiQLData](https://github.com/apollographql/apollo-server/blob/master/packages/apollo-server-module-graphiql/src/renderGraphiQL.ts#L9-L29).
-
-```js
-const { graphiqlFastify } = require("fastify-apollo");
-
-fastify.register(graphiqlFastify, {
-  endpointURL: "/",
-  prefix: "/graphiql"
-})
-```
-
-###
-
-<div>
-  <img src="https://travis-ci.org/coopnd/fastify-apollo.svg?branch=master">
-
-  <a href="https://standardjs.com">
-    <img src="https://img.shields.io/badge/code_style-standard-brightgreen.svg">
-  </a>
-</div>
+GraphiQL settings extends [GraphiQLData](https://github.com/apollographql/apollo-server/blob/master/packages/apollo-server-module-graphiql/src/renderGraphiQL.ts#L9-L29)
