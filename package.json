@@ -1,6 +1,6 @@
 {
   "name": "fastify-graphql",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Apollo server plugin for Fastify",
   "main": "out/FastifyGraphQL.js",
   "typings": "out/FastifyGraphQL.d.ts",
@@ -8,7 +8,7 @@
     "npm": "=< ~5.1.0"
   },
   "scripts": {
-    "prepublish": "tsc",
+    "prepare": "tsc",
     "test": "./node_modules/mocha/bin/mocha --require ts-node/register ./test/**/*.spec.ts"
   },
   "repository": {
