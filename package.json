@@ -1,43 +1,56 @@
 {
-  "name": "fastify-apollo",
+  "name": "fastify-graphql",
   "version": "3.0.0",
   "description": "Apollo server plugin for Fastify",
-  "main": "index.js",
+  "main": "out/FastifyGraphQL.js",
+  "typings": "out/FastifyGraphQL.d.ts",
   "engines": {
     "npm": "=< ~5.1.0"
   },
   "scripts": {
-    "test": "standard && tap test.js"
+    "prepublish": "tsc",
+    "test": "./node_modules/mocha/bin/mocha --require ts-node/register ./test/**/*.spec.ts"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/coopnd/fastify-apollo.git"
+    "url": "git+https://github.com/sirsavary/fastify-graphql.git"
   },
   "keywords": [
     "fastify",
     "apollo",
     "graphql"
   ],
-  "author": "Nickolena Coop",
+  "author": "Jesse Savary",
+  "contributors": [
+    {
+      "name": "Nickolena Coop",
+      "url": "https://github.com/coopnd/"
+    }
+  ],
   "license": "MIT",
-  "homepage": "https://github.com/coopnd/fastify-apollo#readme",
+  "homepage": "https://github.com/sirsavary/fastify-graphql#readme",
   "bugs": {
-    "url": "https://github.com/coopnd/fastify-apollo/issues"
+    "url": "https://github.com/sirsavary/fastify-graphql/issues"
   },
   "dependencies": {
-    "apollo-server-core": "^1.1.7",
-    "apollo-server-module-graphiql": "^1.1.6",
-    "fastify-plugin": "^0.1.1"
+    "apollo-server-core": "^1.3.2",
+    "apollo-server-module-graphiql": "^1.3.2",
+    "fastify-plugin": "^0.2.1"
   },
   "devDependencies": {
-    "fastify": "^0.37.0",
-    "graphql": "^0.11.7",
-    "graphql-tools": "^1.2.3",
-    "request": "^2.83.0",
-    "standard": "^10.0.3",
-    "tap": "^10.7.2"
+    "@types/chai": "^4.1.2",
+    "@types/mocha": "^2.2.47",
+    "chai": "^4.1.2",
+    "chai-graphql": "^4.0.0",
+    "fastify": "^0.40.0",
+    "graphql": "^0.12.3",
+    "graphql-tools": "^2.19.0",
+    "mocha": "^5.0.0",
+    "nyc": "^11.4.1",
+    "ts-node": "^4.1.0",
+    "typescript": "^2.6.2"
   },
   "peerDependencies": {
-    "graphql": "~0.11"
+    "graphql": "~0.12"
   }
 }
