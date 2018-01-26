@@ -3,12 +3,22 @@
   <img src="https://travis-ci.org/sirsavary/fastify-graphql.svg?branch=master">
 </div>
 
-## Install
+A plugin for [Fastify](https://github.com/fastify/fastify) that adds GraphQL and GraphiQL support.
+
+This project was forked from [fastify-apollo](https://github.com/coopnd/fastify-apollo) as it is no longer being maintained fast enough to keep pace with the rapid changes happening in the GraphQL ecosystem.
+
+## Installation
 ```bash
 npm install --save fastify-apollo graphql
 ```
 
-## Register Plugins
+or
+
+```bash
+yarn add fastify-apollo graphql
+```
+
+## Usage
 ```js
 const Fastify = require('fastify');
 const app = Fastify();
