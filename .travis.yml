@@ -8,3 +8,10 @@ node_js:
 
 before_install:
   - npm i -g npm@5.1.0
+
+deploy:
+  provider: npm
+  email: sirsavary@outlook.com
+  api_key: $NPM_TOKEN
+  on:
+    tags: true

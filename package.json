@@ -9,6 +9,7 @@
   },
   "scripts": {
     "prepare": "tsc",
+    "release": "standard-version",
     "test": "./node_modules/mocha/bin/mocha $NODE_DEBUG_OPTION --require ts-node/register ./test/**/*.spec.ts"
   },
   "repository": {
@@ -48,6 +49,7 @@
     "graphql-tools": "^2.19.0",
     "mocha": "^5.0.0",
     "nyc": "^11.4.1",
+    "standard-version": "^4.3.0",
     "ts-node": "^4.1.0",
     "typescript": "^2.6.2"
   },
