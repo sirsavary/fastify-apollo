@@ -16,21 +16,28 @@ function GraphQLPlugin(fastify: any, pluginOptions: { prefix: string, graphql: F
       options: pluginOptions.graphql,
       query: method === 'POST' ? request.body : request.query,
     }).then((gqlResponse) => {
-      reply.type('application/graphql').send(gqlResponse);
+      //TODO find out if we can make this more efficient
+      // we have to parse the already serialized JSON from runHTTPQuery
+      // because fastify sees our json content-type header and assumes
+      // that the payload is an unserialized object. Unfortunately there
+      // is no way for us to override the JSON serializer, so for now
+      // we must parse the string and let fastify do the serialization
+      reply.type('application/json').send(JSON.parse(gqlResponse));
     }).catch((error) => {
-      // pass through GraphQL error headers
-      if (error.name === 'HttpQueryError') {
-        if (error.headers) {
-          Object.keys(error.headers).forEach((header) => {
-            reply.header(header, error.headers[header]);
-          });
-        }
+      if ('HttpQueryError' !== error.name) {
+        throw error;
       }
 
-      // use status code or default to 500
-      reply.code(error.statusCode ? error.statusCode : 500);
-
-      reply.type('application/graphql').send(error.message);
+      if (error.headers) {
+        Object.keys(error.headers).forEach(header => {
+          reply.header(header, error.headers[header]);
+        });
+      }
+      
+      reply.code(error.statusCode);
+      // error.message is actually a stringified GQL response, see
+      // comment @ line 19 for why we need to parse it before sending
+      reply.send(JSON.parse(error.message));
     });
   };
 
