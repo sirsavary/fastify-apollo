@@ -1,6 +1,6 @@
 {
   "name": "fastify-graphql",
-  "version": "3.1.4",
+  "version": "3.1.5",
   "description": "Apollo server plugin for Fastify",
   "main": "out/FastifyGraphQL.js",
   "typings": "out/FastifyGraphQL.d.ts",
