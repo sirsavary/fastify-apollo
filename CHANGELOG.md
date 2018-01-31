@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.1.4"></a>
+## [3.1.4](https://github.com/sirsavary/fastify-graphql/compare/v3.1.3...v3.1.4) (2018-01-31)
+
+
+### Bug Fixes
+
+* Travis no longer references the old build script ([1db22ec](https://github.com/sirsavary/fastify-graphql/commit/1db22ec))
+
+
+
 <a name="3.1.3"></a>
 ## [3.1.3](https://github.com/sirsavary/fastify-graphql/compare/v3.1.2...v3.1.3) (2018-01-31)
 
