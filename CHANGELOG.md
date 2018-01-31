@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.1.7"></a>
+## [3.1.7](https://github.com/sirsavary/fastify-graphql/compare/v3.1.6...v3.1.7) (2018-01-31)
+
+
+### Bug Fixes
+
+* fixed Travis not deploying compiled Typescript files ([3be965e](https://github.com/sirsavary/fastify-graphql/commit/3be965e))
+
+
+
 <a name="3.1.6"></a>
 ## [3.1.6](https://github.com/sirsavary/fastify-graphql/compare/v3.1.5...v3.1.6) (2018-01-31)
 
