@@ -9,7 +9,7 @@
   },
   "scripts": {
     "prepare": "tsc",
-    "test": "./node_modules/mocha/bin/mocha --require ts-node/register ./test/**/*.spec.ts"
+    "test": "./node_modules/mocha/bin/mocha $NODE_DEBUG_OPTION --require ts-node/register ./test/**/*.spec.ts"
   },
   "repository": {
     "type": "git",
