@@ -1,4 +1,4 @@
-import * as FastifyPlugin from 'fastify-plugin';
+import FastifyPlugin from 'fastify-plugin';
 
 import GraphQLPlugin from "./GraphQLPlugin";
 import GraphiQLPlugin from "./GraphiQLPlugin";
