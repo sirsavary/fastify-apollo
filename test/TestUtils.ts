@@ -1,4 +1,4 @@
-import * as Fastify from 'fastify';
+import Fastify from 'fastify';
 import { makeExecutableSchema } from 'graphql-tools';
 import {graphiqlFastify, graphqlFastify} from "../src/FastifyGraphQL";
 import {GraphQLSchema} from "graphql";

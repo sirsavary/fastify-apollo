@@ -1,7 +1,7 @@
 import 'mocha';
-import * as Chai from 'chai';
+import Chai from 'chai';
 import {expect} from 'chai';
-import * as ChaiGraphQL from 'chai-graphql';
+import ChaiGraphQL from 'chai-graphql';
 import {createFastifyApp, createGQLSchema} from "./TestUtils";
 
 Chai.use(ChaiGraphQL);

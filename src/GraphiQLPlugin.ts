@@ -1,27 +1,25 @@
-// GraphiQL Plugin
-import * as GraphiQL from "apollo-server-module-graphiql";
-import * as URL from "url";
-import {GraphiQLData} from "apollo-server-module-graphiql";
+import URL                                               from 'url';
+import { GraphiQLData, resolveGraphiQLString }           from 'apollo-server-module-graphiql';
+import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
+import { IncomingMessage, OutgoingMessage, Server }      from 'http';
 
-function GraphiQLPlugin(fastify: any, options: { prefix: string, graphiql: GraphiQLData | Function }, next: any) {
+function GraphiQLPlugin(fastify: FastifyInstance<Server, IncomingMessage, OutgoingMessage>, options: { prefix: string, graphiql: GraphiQLData | Function }, next: (err?: Error) => void) {
   options = Object.assign({
-    prefix: '/graphiql',
+    prefix  : '/graphiql',
     graphiql: {
       endpointURL: '/graphql',
     },
   }, options);
 
-  const handler = (request: any, reply: any) => {
-    const query = request.url && URL.parse(request.url, true).query;
-    GraphiQL.resolveGraphiQLString(query, options.graphiql, [request, reply])
-      .then((graphiqlString: string) => {
-        reply.type('text/html').send(graphiqlString);
-      })
-      .catch((error) => {
-        // use status code or default to 500
-        reply.code(500);
-        reply.send(error.message);
-      });
+  const handler = async (request: FastifyRequest<IncomingMessage>, reply: FastifyReply<OutgoingMessage>) => {
+    try {
+      const query          = request.req.url && URL.parse(request.req.url, true).query;
+      const graphiqlString = await resolveGraphiQLString(query, options.graphiql, [request, reply]);
+      reply.type('text/html').send(graphiqlString);
+    } catch (error) {
+      reply.code(500);
+      reply.send(error.message);
+    }
   };
 
   fastify.get('/', handler);
