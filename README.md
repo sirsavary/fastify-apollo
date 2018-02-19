@@ -9,13 +9,13 @@ This project was forked from [fastify-apollo](https://github.com/coopnd/fastify-
 
 ## Installation
 ```bash
-npm install --save fastify-apollo graphql
+npm install --save fastify-graphql graphql
 ```
 
 or
 
 ```bash
-yarn add fastify-apollo graphql
+yarn add fastify-graphql graphql
 ```
 
 ## Usage
