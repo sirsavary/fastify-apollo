@@ -10,7 +10,7 @@ const fp = (plugin: Middleware<any, any, any>) =>
     fastify.register(plugin, opts);
     next()
   }, {
-    fastify: '^0.40.0',
+    fastify: '>=0.40.0',
   });
 
 const graphqlFastify = fp(GraphQLPlugin);
