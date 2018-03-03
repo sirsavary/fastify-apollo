@@ -1,9 +1,8 @@
-import { runHttpQuery }                                  from 'apollo-server-core';
-import GraphQLServerOptions                              from 'apollo-server-core/dist/graphqlOptions';
+import { runHttpQuery, GraphQLOptions }                  from 'apollo-server-core';
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import { IncomingMessage, OutgoingMessage, Server }      from 'http';
 
-function GraphQLPlugin(fastify: FastifyInstance<Server, IncomingMessage, OutgoingMessage>, pluginOptions: { prefix: string, graphql: Function | GraphQLServerOptions }, next: (err?: Error) => void) {
+function GraphQLPlugin(fastify: FastifyInstance<Server, IncomingMessage, OutgoingMessage>, pluginOptions: { prefix: string, graphql: Function | GraphQLOptions }, next: (err?: Error) => void) {
   if (!pluginOptions) throw new Error('Fastify GraphQL requires options!');
   else if (!pluginOptions.prefix) throw new Error('Fastify GraphQL requires `prefix` to be part of passed options!');
   else if (!pluginOptions.graphql) throw new Error('Fastify GraphQL requires `graphql` to be part of passed options!');
@@ -16,14 +15,13 @@ function GraphQLPlugin(fastify: FastifyInstance<Server, IncomingMessage, Outgoin
         options: pluginOptions.graphql,
         query  : method === 'POST' ? request.body : request.query,
       });
-
-      //TODO find out if we can make this more efficient
-      // we have to parse the already serialized JSON from runHTTPQuery
-      // because fastify sees our json content-type header and assumes
-      // that the payload is an unserialized object. Unfortunately there
-      // is no way for us to override the JSON serializer, so for now
-      // we must parse the string and let fastify do the serialization
-      reply.type('application/json').send(JSON.parse(gqlResponse));
+      
+      // bypass Fastify's response layer, so we can avoid having to
+      // parse the serialized gqlResponse due to Fastify's internal 
+      // JSON serializer seeing our Content-Type header and assuming 
+      // the response payload is unserialized
+      reply.res.setHeader('Content-Type', 'application/json');
+      reply.res.end(gqlResponse);
     } catch (error) {
       if ('HttpQueryError' !== error.name) {
         throw error;
@@ -37,9 +35,13 @@ function GraphQLPlugin(fastify: FastifyInstance<Server, IncomingMessage, Outgoin
 
       reply.code(error.statusCode);
       // error.message is actually a stringified GQL response, see
-      // comment @ line 20 for why we need to parse it before sending
-      // reply.send(JSON.parse(error.message));
-      reply.send(error.isGraphQLError ? JSON.parse(error.message) : error.message);
+      // comment @ line 19 for why we bypass Fastify's response layer
+      if (error.isGraphQLError) {
+        reply.res.setHeader('Content-Type', 'application/json');
+        reply.res.end(error.message);
+      } else {
+        reply.send(error.message);
+      }
     }
   };
   
