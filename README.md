@@ -1,7 +1,7 @@
 # fastify-graphql
-<div>
-  <img src="https://travis-ci.org/sirsavary/fastify-graphql.svg?branch=master">
-</div>
+[![Travis](https://img.shields.io/travis/sirsavary/fastify-graphql.svg)](https://travis-ci.org/sirsavary/fastify-graphql)
+[![npm](https://img.shields.io/npm/v/fastify-graphql.svg)](https://www.npmjs.com/package/fastify-graphql)
+[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
 
 A plugin for [Fastify](https://github.com/fastify/fastify) that adds GraphQL and GraphiQL support.
 
