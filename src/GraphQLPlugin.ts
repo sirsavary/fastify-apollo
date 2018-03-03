@@ -47,7 +47,18 @@ function GraphQLPlugin(fastify: FastifyInstance<Server, IncomingMessage, Outgoin
   
   fastify.get('/', handler);
   fastify.post('/', handler);
-
+  
+  //TODO determine if this is really the best way to have Fastify not 404 on an invalid HTTP method
+  fastify.setNotFoundHandler((request, reply) => {
+    if (request.req.method !== 'POST' && request.req.method !== 'POST') {
+      reply.code(405);
+      reply.header('allow', ['GET', 'POST']);
+    } else {
+      reply.code(404);
+    }
+    reply.send();
+  });
+  
   next();
 }
 
