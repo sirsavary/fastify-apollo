@@ -10,7 +10,7 @@
   "scripts": {
     "prepare": "./node_modules/typescript/bin/tsc --extendedDiagnostics",
     "release": "standard-version",
-    "test": "./node_modules/mocha/bin/mocha $NODE_DEBUG_OPTION --require ts-node/register ./test/**/*.spec.ts"
+    "test": "./node_modules/mocha/bin/mocha $NODE_DEBUG_OPTION --require ts-node/register ./test/**/*.test.ts"
   },
   "repository": {
     "type": "git",
