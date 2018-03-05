@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="4.0.0"></a>
+# [4.0.0](https://github.com/sirsavary/fastify-graphql/compare/v3.1.11...v4.0.0) (2018-03-05)
+
+
+### Bug Fixes
+
+* **travis:** don't test releases that are unsupported by fastify ([e1432c2](https://github.com/sirsavary/fastify-graphql/commit/e1432c2))
+
+
+### BREAKING CHANGES
+
+* **travis:** users running node v4 or v5 will no longer be able to use this module (or fastify)
+
+
+
 <a name="3.1.11"></a>
 ## [3.1.11](https://github.com/sirsavary/fastify-graphql/compare/v3.1.10...v3.1.11) (2018-03-05)
 
