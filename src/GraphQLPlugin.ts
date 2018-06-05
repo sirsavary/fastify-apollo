@@ -20,6 +20,7 @@ function GraphQLPlugin(fastify: FastifyInstance<Server, IncomingMessage, Outgoin
       // parse the serialized gqlResponse due to Fastify's internal 
       // JSON serializer seeing our Content-Type header and assuming 
       // the response payload is unserialized
+      reply.sent = true
       reply.res.setHeader('Content-Type', 'application/json');
       reply.res.end(gqlResponse);
     } catch (error) {
@@ -37,6 +38,7 @@ function GraphQLPlugin(fastify: FastifyInstance<Server, IncomingMessage, Outgoin
       // error.message is actually a stringified GQL response, see
       // comment @ line 19 for why we bypass Fastify's response layer
       if (error.isGraphQLError) {
+        reply.sent = true
         reply.res.setHeader('Content-Type', 'application/json');
         reply.res.end(error.message);
       } else {
