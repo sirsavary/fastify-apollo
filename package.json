@@ -47,7 +47,7 @@
     "apollo-server-module-operation-store": "^1.3.2",
     "chai": "^4.1.2",
     "chai-graphql": "^4.0.0",
-    "fastify": "^1.0.0-rc.3",
+    "fastify": "^1.5.0",
     "graphql": "^0.12.3",
     "graphql-tools": "^2.21.0",
     "mocha": "^5.0.1",
