@@ -51,11 +51,6 @@ function GraphQLPlugin(fastify: FastifyInstance<Server, IncomingMessage, Outgoin
     }
   };
     
-//    const handler = async (request: FastifyRequest<IncomingMessage>, reply: FastifyReply<OutgoingMessage>) =>  {
-//        const requestWithContext: FastifyRequestWithCtx=<FastifyRequestWithCtx>request;
-//        return handlerWrap(request,reply)
-//    };
-    
   fastify.get('/', handler);
   fastify.post('/', handler);
   
