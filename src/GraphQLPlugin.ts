@@ -6,10 +6,14 @@ function GraphQLPlugin(fastify: FastifyInstance<Server, IncomingMessage, Outgoin
   if (!pluginOptions) throw new Error('Fastify GraphQL requires options!');
   else if (!pluginOptions.prefix) throw new Error('Fastify GraphQL requires `prefix` to be part of passed options!');
   else if (!pluginOptions.graphql) throw new Error('Fastify GraphQL requires `graphql` to be part of passed options!');
-
-  const handler = async (request: FastifyRequest<IncomingMessage>, reply: FastifyReply<OutgoingMessage>) => {
+ 
+  const handler = async (request:FastifyRequest<IncomingMessage> , reply: FastifyReply<OutgoingMessage>) => {
     try {
       let method = request.req.method;
+        
+      if(typeof pluginOptions.graphql==='function')
+        pluginOptions.graphql(request,reply);
+          
       const gqlResponse = await runHttpQuery([request, reply], {
         method : method,
         options: pluginOptions.graphql,
@@ -46,7 +50,7 @@ function GraphQLPlugin(fastify: FastifyInstance<Server, IncomingMessage, Outgoin
       }
     }
   };
-  
+    
   fastify.get('/', handler);
   fastify.post('/', handler);
   
