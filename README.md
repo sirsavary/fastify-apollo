@@ -45,3 +45,45 @@ Both plugins need to be given a prefix, under which they will mount.
 GraphQL settings extends [GraphQLServerOptions](https://github.com/apollographql/apollo-server/blob/master/packages/apollo-server-core/src/graphqlOptions.ts#L9-L37)
 
 GraphiQL settings extends [GraphiQLData](https://github.com/apollographql/apollo-server/blob/master/packages/apollo-server-module-graphiql/src/renderGraphiQL.ts#L9-L33)
+
+
+## Context for resolvers
+
+If you want to pass a request context to resolvers like following 
+(eg: parse request header Bearer tokens to identify who has called the query)
+
+```js
+const schema:`type Query{
+  hello (name:String) :String,
+}`,
+const resolvers: {
+  hello: (args, context)=>{
+    console.log(args, context) 
+    // args = name from query call; context = { user:{ id:1, name:'John' } }
+    return 'hello '+args;
+  }
+},
+```
+
+then implement a function to access fastify's req, res. The function will be called before graphQL and must returns GraphQLOptions object like following
+
+```js
+ graphQLOptionsFn(req,res)=>{
+   let payload = { user:{ id:1, name:'John' } }; //parsed from req.headers...
+   return {
+     schema: schema,
+     rootValue: resolvers,
+     context: payload 
+   }
+ }); 
+```
+
+provide graphQLOptionsFn in plugin register call. It will be executed synchronously to ensure execution before graphQL API 
+
+```js
+fastify.register(graphqlFastify, {
+    prefix: "/graphql",
+    graphql: graphQLOptionsFn
+  }
+);
+```
