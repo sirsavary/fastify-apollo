@@ -2,23 +2,17 @@ import { runHttpQuery, GraphQLOptions }                  from 'apollo-server-cor
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import { IncomingMessage, OutgoingMessage, Server }      from 'http';
 
-interface FastifyRequestWithCtx extends FastifyRequest <IncomingMessage>{
-    context?: any;
-};
-    
 function GraphQLPlugin(fastify: FastifyInstance<Server, IncomingMessage, OutgoingMessage>, pluginOptions: { prefix: string, graphql: Function | GraphQLOptions }, next: (err?: Error) => void) {
   if (!pluginOptions) throw new Error('Fastify GraphQL requires options!');
   else if (!pluginOptions.prefix) throw new Error('Fastify GraphQL requires `prefix` to be part of passed options!');
   else if (!pluginOptions.graphql) throw new Error('Fastify GraphQL requires `graphql` to be part of passed options!');
  
-  const handlerWrap = async (request: FastifyRequestWithCtx, reply: FastifyReply<OutgoingMessage>) => {
+  const handler = async (request:FastifyRequest<IncomingMessage> , reply: FastifyReply<OutgoingMessage>) => {
     try {
       let method = request.req.method;
-      if(request.context && typeof request.context==='object' && typeof pluginOptions.graphql==='object')
-        pluginOptions.graphql.context = pluginOptions.graphql.context 
-                                        && typeof pluginOptions.graphql.context==='object'?
-                                        Object.assign(pluginOptions.graphql.context,request.context)
-                                        :request.context;
+        
+      if(typeof pluginOptions.graphql==='function')
+        pluginOptions.graphql(request,reply);
           
       const gqlResponse = await runHttpQuery([request, reply], {
         method : method,
@@ -57,10 +51,10 @@ function GraphQLPlugin(fastify: FastifyInstance<Server, IncomingMessage, Outgoin
     }
   };
     
-    const handler = async (request: FastifyRequest<IncomingMessage>, reply: FastifyReply<OutgoingMessage>) =>  {
-        const requestWithContext: FastifyRequestWithCtx=<FastifyRequestWithCtx>request;
-        return handlerWrap(request,reply)
-    };
+//    const handler = async (request: FastifyRequest<IncomingMessage>, reply: FastifyReply<OutgoingMessage>) =>  {
+//        const requestWithContext: FastifyRequestWithCtx=<FastifyRequestWithCtx>request;
+//        return handlerWrap(request,reply)
+//    };
     
   fastify.get('/', handler);
   fastify.post('/', handler);
